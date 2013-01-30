@@ -15,9 +15,10 @@ describe "Static pages" do
     before { visit root_path }
 
     let(:heading)    { 'm-lo app' }
-    let(:page_title) { 'Home' }
+    let(:page_title) { '' }
 
     it_should_behave_like "all static pages"
+    it { should_not have_selector 'title', text: '| Home' }
   end
 
   describe "Help page" do
@@ -36,16 +37,31 @@ describe "Static pages" do
     it_should_behave_like "all static pages"
   end
 
-
   describe "Contact page" do
     before { visit contact_path }
     let(:heading)    { 'Contact' }
-    let(:page_title) { '' }
+    let(:page_title) { 'Contact' }
 
     it_should_behave_like "all static pages"
     it { should have_content('Don\'t call us, we\'ll call you') }
-    it { should_not have_selector 'title', text: '| Contact' }
   end
+
+  describe "signup page" do
+    before { visit signup_path }
+
+    it { should have_selector('h1',    text: 'Sign Up') }
+    it { should have_selector('title', text: 'Sign Up') }
+  end
+
+  describe "profile page" do
+    # Code to make a user variable
+    let(:user) { FactoryGirl.create(:user) }
+    before { visit user_path(user) }
+
+    it { should have_selector('h1',    text: user.name) }
+    it { should have_selector('title', text: user.name) }
+  end
+
 
   it "should have the right links on the layout" do
     visit root_path
