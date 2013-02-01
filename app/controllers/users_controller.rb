@@ -37,22 +37,34 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
-  # POST /users
-  # POST /users.json
+
   def create
     @user = User.new(params[:user])
-
-    respond_to do |format|
-      if @user.save
-        flash[:success] = "Welcome to the Sample App!"
-        format.html { redirect_to @user} #, notice: 'User was successfully created.' }
-        format.json { render json: @user, status: :created, location: @user }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    if @user.save
+      sign_in @user
+      flash[:success] = "Welcome to the Sample App!"
+      redirect_to @user
+    else
+      render 'new'
     end
   end
+  # POST /users
+  # POST /users.json
+  #def create
+  #  @user = User.new(params[:user])
+
+  #  respond_to do |format|
+  #   if @user.save
+  #      sign_in @user
+  #      flash[:success] = "Welcome to m-lo app!"
+  #      format.html { redirect_to @user} #, notice: 'User was successfully created.' }
+  #      format.json { render json: @user, status: :created, location: @user }
+  #    else
+  #      format.html { render action: "new" }
+  #      format.json { render json: @user.errors, status: :unprocessable_entity }
+  #    end
+  #  end
+#  end
 
   # PUT /users/1
   # PUT /users/1.json
